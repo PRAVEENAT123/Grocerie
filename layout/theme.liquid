@@ -11,14 +11,15 @@
   {{ content_for_header }}
   <!-- Header hook for plugins -->
   {{ 'application.css' | asset_url | stylesheet_tag }}
-
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
 <body>
   <main role="main">
+    {% section 'header' %}
     {{ content_for_layout }}
   </main>
-  <h1 class="bg-red-200"></h1>
+
 </body>
 
 </html>
