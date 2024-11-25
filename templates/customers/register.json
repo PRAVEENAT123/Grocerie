@@ -1,0 +1,12 @@
+{
+
+"sections": {
+"template-register": {
+"type": "template-register",
+"settings": {}
+}
+},
+"order": [
+"template-register"
+]
+}
