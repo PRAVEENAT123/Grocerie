@@ -1,18 +1,41 @@
-{% paginate collection.products by 2 %}
-  <h1>{{ collection.title }}</h1>
-  {% for product in collection.products %}
-    <div>
-      <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
-      {{ product.price | money }}
-      {% unless product.available %}<br><strong>sold out</strong>{% endunless %}
-      <a href="{{ product.url | within: collection }}">
-        <img src="{{ product.featured_image.src | img_url: 'large' }}" alt="{{ product.featured_image.alt | escape }}">
-      </a>
+<div class="px-4 py-8">
+  {% paginate collection.products by section.settings.number_of_product_show %}
+  <h1 class="text-3xl text-center">{{ collection.title }}</h1>
+  <div class="max-w-6xl mx-auto">
+    <!-- Responsive Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {% for product in collection.products %}
+      <div class="w-full py-6 px-3">
+        <!-- Render product card -->
+        {% comment %} {% render 'productcard', product_info: product %} {% endcomment %}
+      </div>
+      {% else %}
+      <p>There are no products inside of this collection</p>
+      {% endfor %}
     </div>
-  {% else %}
-    <p>no matches</p>
-  {% endfor %}
-  {% if paginate.pages > 1 %}
-    {{ paginate | default_pagination }}
-  {% endif %}
-{% endpaginate %}
+  </div>
+
+  <!-- Pagination -->
+  {% comment %} {% render 'pagination', pagination: paginate %} {% endcomment %}
+  {% endpaginate %}
+</div>
+
+{% schema %}
+{
+"name": "Template Collection",
+"settings": [
+{
+"type": "number",
+"id": "number_of_product_show",
+"label": "Number of Products",
+"default": 6
+}
+],
+"presets": [
+{
+"name": "Template Collection",
+"category": "Custom"
+}
+]
+}
+{% endschema %}
