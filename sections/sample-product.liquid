@@ -1,38 +1,8 @@
 {% for collection in collections %}
-<h2>Collection: {{ collection.title }}</h2>
-{{ collection.image }}
 {% for product in collection.products %}
-    <div class="border bg-white shadow-lg rounded-lg overflow-hidden">
-        <a href="{{ product.url }}">
-            
-            {% if product.featured_image %}
-            <div class="h-80 overflow-hidden">
-                <img class="w-full h-full object-cover" src="{{ product.featured_image | img_url: 'medium' }}"
-                    alt="{{ product.featured_image.alt }}">
-            </div>
-            {% else %}
-            <div class="h-80 overflow-hidden flex justify-center items-center bg-gray-100">
-                {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover bg-gray-100' }}
-            </div>
-            {% endif %}
-        </a>
-        <div class="flex flex-col p-4">
-            <span class="text-sm text-gray-400">{{ product.vendor | default: 'Unknown Vendor' }}</span>
-            <a href="{{ product.url }}" class="text-gray-700 uppercase font-medium">
-                {{ product.title | default: 'Untitled Product' }}
-            </a>
-            {% if product.price >0 %}
-            <p class="text-gray-500">
-                {{ product.price | money_with_currency }}
-            </p>
-            {% else %}
-            <p class="text-gray-500">Price not available</p>
-            {% endif %}
-        </div>
-    </div>
-<h3>{{ product.title }}</h3>
+
+<h1>
+    {{product.title}}
+</h1>
 {% endfor %}
 {% endfor %}
-
-
-

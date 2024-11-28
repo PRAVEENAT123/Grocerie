@@ -14,3 +14,10 @@
 {% endform %} {% endcomment %}
 
 <h1>this is contect page </h1>
+<ul>
+  {% for page in pages %}
+  <li>
+    <a href="{{ page.url }}">{{ page.title }}</a>
+  </li>
+  {% endfor %}
+</ul>
