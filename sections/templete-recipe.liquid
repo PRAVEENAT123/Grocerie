@@ -4,6 +4,12 @@
 "name": "Recipe Section",
 "settings": [
 {
+"type": "text",
+"id": "recipe_title",
+"label": "Name Of the Recipe",
+"default": "Your Menu"
+},
+{
 "type": "image_picker",
 "id": "recipe_image",
 "label": "Recipe Image"
@@ -12,7 +18,7 @@
 "type": "text",
 "id": "recipe_people",
 "label": "Number of People",
-"default": "4"
+"default": "1"
 },
 {
 "type": "textarea",
@@ -33,8 +39,28 @@
 {
 "type": "text",
 "id": "ingredient_measurement",
-"label": "Measurement (e.g., 200g)"
+"label": "Measurement (200g)"
 },
+{
+"type": "select",
+"id": "ingredient_measurement-scale",
+"label": "Scale",
+"options": [
+{
+"value": "GM",
+"label": "g"
+},
+{
+"value": "KG",
+"label": "kg"
+},
+{
+"value": "ML",
+"label": "ml"
+}
+]
+}
+,
 {
 "type": "product",
 "id": "ingredient_product",
@@ -53,16 +79,30 @@
 {% endschema %}
 
 <div class="recipe-section">
+    <h1>{{section.settings.recipe_title}}</h1>
     <!-- Recipe Image -->
     {% if section.settings.recipe_image %}
-    <img src="{{ section.settings.recipe_image | file_url }}" alt="Recipe Image" class="recipe-image" />
+    <img src="{{section.settings.recipe_image |  file_img_url}}" width="100" height="200" alt="">
     {% endif %}
 
     <!-- Number of People -->
     <div class="recipe-people mb-4">
-        <strong>Serves:</strong>
-        <input type="number" id="recipePeople" value="{{ section.settings.recipe_people }}" class="border p-2 rounded"
-            onchange="updateIngredients()" />
+        <strong> How Many Serves:</strong>
+        <input type="number" id="recipePeople" value="{{ section.settings.recipe_people }}"
+            class="border p-2 rounded" />
+    </div>
+
+    <!-- Update Servings Button -->
+    <div class="mb-4">
+        {% comment %} <button id="updateServingsButton" class="bg-blue-500 text-white py-2 px-4 rounded"
+            onclick="updateIngredients()">
+            Update Ingredients
+        </button> {% endcomment %}
+        <button
+            class="bg-blue-600  bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+            Calulate
+        </button>
+
     </div>
 
     <!-- Recipe Instructions -->
@@ -77,10 +117,13 @@
         <ul id="ingredientsList">
             {% for block in section.blocks %}
             {% if block.type == 'ingredient' %}
-            <li class="mb-2">
+            <li class="mb-2" id="ingredient{{ forloop.index }}">
                 <div class="flex items-center space-x-2">
                     <span class="font-medium">{{ block.settings.ingredient_name }}:</span>
                     <span id="ingredient{{ forloop.index }}_measurement">{{ block.settings.ingredient_measurement
+                        }}</span>
+                    <span id="ingredient{{ forloop.index }}_measurement-scale">{{
+                        block.settings.ingredient_measurement-scale
                         }}</span>
                 </div>
                 {% if block.settings.ingredient_product %}
@@ -89,6 +132,20 @@
                         Product</a>
                     <img src="{{ block.settings.ingredient_product.featured_image | img_url: 'small' }}"
                         alt="{{ block.settings.ingredient_name }}" class="w-16 h-16 object-cover mt-2" />
+                    <!-- Product Variants -->
+                    {% if block.settings.ingredient_product.variants.size > 1 %}
+                    <div class="mt-2">
+                        <strong>Select Version:</strong>
+                        <select class="border p-2 rounded" id="variant{{ forloop.index }}"
+                            onchange="updateMeasurementForVariant({{ forloop.index }})">
+                            {% for variant in block.settings.ingredient_product.variants %}
+                            <option value="{{ variant.id }}" data-available="{{ variant.available }}">
+                                {{ variant.title }} - {{ variant.price | money }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
                 </div>
                 {% endif %}
             </li>
@@ -107,15 +164,51 @@
     ingredientBlocks.forEach((block, index) => {
         if (block.type === 'ingredient') {
             const ingredientMeasurement = block.settings.ingredient_measurement;
-            const quantity = parseFloat(ingredientMeasurement);
 
-            if (!isNaN(quantity)) {
-                const newMeasurement = (quantity * numberOfPeople) + ingredientMeasurement.slice(ingredientMeasurement.indexOf('g'));
-                document.getElementById('ingredient' + (index + 1) + '_measurement').textContent = newMeasurement;
+            // Match ingredients with unit (e.g., grams, kilograms)
+            const quantityMatch = ingredientMeasurement.match(/^(\d+)(g|kg)$/);
+
+            if (quantityMatch) {
+                let quantity = parseFloat(quantityMatch[1]);
+                const unit = quantityMatch[2];
+
+                if (unit === 'g') {
+                    quantity *= numberOfPeople; // Adjust for grams
+                    // If quantity exceeds 1000g, convert to kg
+                    if (quantity >= 1000) {
+                        quantity = quantity / 1000; // Convert to kilograms
+                        document.getElementById('ingredient' + (index + 1) + '_measurement').textContent = quantity + ' kg';
+                    } else {
+                        document.getElementById('ingredient' + (index + 1) + '_measurement').textContent = quantity + ' g';
+                    }
+                } else if (unit === 'kg') {
+                    quantity = quantity * 1000 * numberOfPeople; // Convert kg to grams
+                    if (quantity >= 1000) {
+                        quantity = quantity / 1000; // Convert back to kg
+                        document.getElementById('ingredient' + (index + 1) + '_measurement').textContent = quantity + ' kg';
+                    } else {
+                        document.getElementById('ingredient' + (index + 1) + '_measurement').textContent = quantity + ' g';
+                    }
+                }
             }
         }
     });
   }
+
+    function updateMeasurementForVariant(index) {
+        const selectedVariant = document.querySelector(`#variant${index} option:checked`);
+        const available = selectedVariant ? selectedVariant.getAttribute('data-available') === 'true' : false;
+
+        // Show or hide the ingredient measurement based on availability
+        const ingredientMeasurement = document.getElementById(`ingredient${index}_measurement`);
+
+        if (!available) {
+            ingredientMeasurement.classList.add('text-gray-500');
+            ingredientMeasurement.textContent = "Not Available";
+        } else {
+            ingredientMeasurement.classList.remove('text-gray-500');
+        }
+    }
 </script>
 
 <style>
