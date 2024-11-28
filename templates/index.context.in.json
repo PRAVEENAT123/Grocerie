@@ -8,13 +8,9 @@
  * ------------------------------------------------------------
  */
 {
-  "sections": {
-    "sample-product": {
-      "type": "sample-product",
-      "settings": {}
-    }
+  "parent": "index.json",
+  "context": {
+    "market": "in"
   },
-  "order": [
-    "sample-product"
-  ]
+  "sections": {}
 }

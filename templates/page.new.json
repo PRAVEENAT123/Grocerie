@@ -19,10 +19,19 @@
             "ingredient_measurement": "200g",
             "ingredient_product": "basmati-rice-200gm"
           }
+        },
+        "ingredient_AWGHJy": {
+          "type": "ingredient",
+          "settings": {
+            "ingredient_name": "",
+            "ingredient_measurement": "",
+            "ingredient_product": ""
+          }
         }
       },
       "block_order": [
-        "ingredient_WWxaBh"
+        "ingredient_WWxaBh",
+        "ingredient_AWGHJy"
       ],
       "settings": {
         "recipe_people": "4",

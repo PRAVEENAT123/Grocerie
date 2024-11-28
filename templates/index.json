@@ -1,4 +1,3 @@
-
 /*
  * ------------------------------------------------------------
  * IMPORTANT: The contents of this file are auto-generated.
@@ -15,9 +14,9 @@
       "type": "home-page",
       "settings": {}
     },
-    "collection-slider":{
-        "type": "collection-slider"
-
+    "collection-slider": {
+      "type": "collection-slider",
+      "settings": {}
     }
   },
   "order": [
