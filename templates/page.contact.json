@@ -1,7 +1,33 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "templete-recipe": {
       "type": "templete-recipe",
+      "blocks": {
+        "ingredient_WWxaBh": {
+          "type": "ingredient",
+          "settings": {
+            "ingredient_name": "Rice",
+            "ingredient_measurement": "200g",
+            "ingredient_product": "basmati-rice-200gm"
+          }
+        }
+      },
+      "block_order": [
+        "ingredient_WWxaBh"
+      ],
+      "settings": {
+        "recipe_people": "4",
+        "recipe_instructions": ""
+      }
     }
   },
   "order": [
