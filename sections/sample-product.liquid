@@ -1,5 +1,6 @@
 {% for collection in collections %}
 <h2>Collection: {{ collection.title }}</h2>
+{{ collection.image }}
 {% for product in collection.products %}
     <div class="border bg-white shadow-lg rounded-lg overflow-hidden">
         <a href="{{ product.url }}">

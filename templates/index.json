@@ -15,7 +15,7 @@
       "type": "home-page",
       "settings": {}
     },
-    "colletion":{
+    "collection-slider":{
         "type": "collection-slider"
 
     }
