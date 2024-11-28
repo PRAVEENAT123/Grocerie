@@ -1,0 +1,10 @@
+{
+  "sections": {
+    "templete-recipe": {
+      "type": "templete-recipe",
+    }
+  },
+  "order": [
+    "templete-recipe"
+  ]
+}

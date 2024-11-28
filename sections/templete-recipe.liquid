@@ -1,0 +1,110 @@
+<!-- recipe-section.liquid -->
+{% schema %}
+{
+"name": "Recipe Section",
+"settings": [
+{
+"type": "image_picker",
+"id": "recipe_image",
+"label": "Recipe Image"
+},
+{
+"type": "text",
+"id": "recipe_people",
+"label": "Number of People",
+"default": "4"
+},
+{
+"type": "textarea",
+"id": "recipe_instructions",
+"label": "Recipe Instructions"
+}
+],
+"blocks": [
+{
+"type": "ingredient",
+"name": "Ingredient",
+"settings": [
+{
+"type": "text",
+"id": "ingredient_name",
+"label": "Ingredient Name"
+},
+{
+"type": "text",
+"id": "ingredient_measurement",
+"label": "Measurement (e.g., 200g, 2 cups)"
+},
+{
+"type": "product",
+"id": "ingredient_product",
+"label": "Associated Product"
+}
+]
+}
+],
+"presets": [
+{
+"name": "Recipe Section",
+"category": "Custom"
+}
+]
+}
+{% endschema %}
+
+<div class="recipe-section">
+    <!-- Recipe Image -->
+    {% if section.settings.recipe_image %}
+    <img src="{{ section.settings.recipe_image | file_url }}" alt="Recipe Image" class="recipe-image" />
+    {% endif %}
+
+    <!-- Number of People -->
+    <div class="recipe-people">
+        <strong>Serves:</strong> {{ section.settings.recipe_people }} people
+    </div>
+
+    <!-- Recipe Instructions -->
+    <div class="recipe-instructions">
+        <h3>Instructions:</h3>
+        <p>{{ section.settings.recipe_instructions }}</p>
+    </div>
+
+    <!-- Ingredients List -->
+    <div class="recipe-ingredients">
+        <h3>Ingredients:</h3>
+        <ul>
+            {% for block in section.blocks %}
+            {% if block.type == 'ingredient' %}
+            <li>
+                <strong>{{ block.settings.ingredient_name }}:</strong>
+                {{ block.settings.ingredient_measurement }}
+                {% if block.settings.ingredient_product %}
+                - <a href="{{ block.settings.ingredient_product | product_url }}">
+                    View Product
+                </a>
+                {% endif %}
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% style %}
+    .recipe-section {
+    margin: 20px 0;
+    }
+    .recipe-image {
+    max-width: 100%;
+    height: auto;
+    }
+    .recipe-people,
+    .recipe-instructions,
+    .recipe-ingredients {
+    margin: 10px 0;
+    }
+    .recipe-ingredients ul {
+    list-style: disc;
+    margin-left: 20px;
+    }
+
+{% endstyle %}
