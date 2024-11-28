@@ -33,7 +33,7 @@
 {
 "type": "text",
 "id": "ingredient_measurement",
-"label": "Measurement (e.g., 200g, 2 cups)"
+"label": "Measurement (e.g., 200g)"
 },
 {
 "type": "product",
@@ -59,29 +59,37 @@
     {% endif %}
 
     <!-- Number of People -->
-    <div class="recipe-people">
-        <strong>Serves:</strong> {{ section.settings.recipe_people }} people
+    <div class="recipe-people mb-4">
+        <strong>Serves:</strong>
+        <input type="number" id="recipePeople" value="{{ section.settings.recipe_people }}" class="border p-2 rounded"
+            onchange="updateIngredients()" />
     </div>
 
     <!-- Recipe Instructions -->
-    <div class="recipe-instructions">
-        <h3>Instructions:</h3>
+    <div class="recipe-instructions mb-4">
+        <h3 class="text-lg font-semibold">Instructions:</h3>
         <p>{{ section.settings.recipe_instructions }}</p>
     </div>
 
     <!-- Ingredients List -->
     <div class="recipe-ingredients">
-        <h3>Ingredients:</h3>
-        <ul>
+        <h3 class="text-lg font-semibold">Ingredients:</h3>
+        <ul id="ingredientsList">
             {% for block in section.blocks %}
             {% if block.type == 'ingredient' %}
-            <li>
-                <strong>{{ block.settings.ingredient_name }}:</strong>
-                {{ block.settings.ingredient_measurement }}
+            <li class="mb-2">
+                <div class="flex items-center space-x-2">
+                    <span class="font-medium">{{ block.settings.ingredient_name }}:</span>
+                    <span id="ingredient{{ forloop.index }}_measurement">{{ block.settings.ingredient_measurement
+                        }}</span>
+                </div>
                 {% if block.settings.ingredient_product %}
-                - <a href="{{ block.settings.ingredient_product | product_url }}">
-                    View Product
-                </a>
+                <div class="mt-2">
+                    <a href="{{ block.settings.ingredient_product | product_url }}" class="text-blue-500">View
+                        Product</a>
+                    <img src="{{ block.settings.ingredient_product.featured_image | img_url: 'small' }}"
+                        alt="{{ block.settings.ingredient_name }}" class="w-16 h-16 object-cover mt-2" />
+                </div>
                 {% endif %}
             </li>
             {% endif %}
@@ -89,22 +97,38 @@
         </ul>
     </div>
 </div>
-{% style %}
+
+<script>
+    function updateIngredients() {
+        const numberOfPeople = document.getElementById('recipePeople').value;
+        const ingredientBlocks = {{ section.blocks | json
+    }};
+
+    ingredientBlocks.forEach((block, index) => {
+        if (block.type === 'ingredient') {
+            const ingredientMeasurement = block.settings.ingredient_measurement;
+            const quantity = parseFloat(ingredientMeasurement);
+
+            if (!isNaN(quantity)) {
+                const newMeasurement = (quantity * numberOfPeople) + ingredientMeasurement.slice(ingredientMeasurement.indexOf('g'));
+                document.getElementById('ingredient' + (index + 1) + '_measurement').textContent = newMeasurement;
+            }
+        }
+    });
+  }
+</script>
+
+<style>
+    /* Tailwind CSS styling, customize as needed */
     .recipe-section {
-    margin: 20px 0;
-    }
-    .recipe-image {
-    max-width: 100%;
-    height: auto;
-    }
-    .recipe-people,
-    .recipe-instructions,
-    .recipe-ingredients {
-    margin: 10px 0;
-    }
-    .recipe-ingredients ul {
-    list-style: disc;
-    margin-left: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
     }
 
-{% endstyle %}
+    .recipe-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+</style>
