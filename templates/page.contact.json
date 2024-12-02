@@ -16,7 +16,7 @@
           "type": "ingredient",
           "settings": {
             "ingredient_name": "Rice",
-            "ingredient_measurement": "200",
+            "ingredient_measurement": 100,
             "ingredient_measurement_scale": "GM",
             "ingredient_product": "basmati-rice-200gm"
           }
@@ -25,7 +25,7 @@
           "type": "ingredient",
           "settings": {
             "ingredient_name": "Rice",
-            "ingredient_measurement": "200",
+            "ingredient_measurement": 100,
             "ingredient_measurement_scale": "GM",
             "ingredient_product": "basmati-rice-200gm"
           }
@@ -34,7 +34,6 @@
           "type": "ingredient",
           "settings": {
             "ingredient_name": "Rice",
-            "ingredient_measurement": "200",
             "ingredient_measurement_scale": "GM",
             "ingredient_product": "basmati-rice-200gm"
           }
@@ -43,7 +42,6 @@
           "type": "ingredient",
           "settings": {
             "ingredient_name": "Rice",
-            "ingredient_measurement": "200",
             "ingredient_measurement_scale": "GM",
             "ingredient_product": "basmati-rice-200gm"
           }
@@ -52,7 +50,6 @@
           "type": "ingredient",
           "settings": {
             "ingredient_name": "Rice",
-            "ingredient_measurement": "1000",
             "ingredient_measurement_scale": "GM",
             "ingredient_product": "basmati-rice-200gm"
           }
