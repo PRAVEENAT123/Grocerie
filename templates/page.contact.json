@@ -17,13 +17,53 @@
           "settings": {
             "ingredient_name": "Rice",
             "ingredient_measurement": "200",
-            "ingredient_measurement-scale": "GM",
+            "ingredient_measurement_scale": "GM",
+            "ingredient_product": "basmati-rice-200gm"
+          }
+        },
+        "ingredient_hAaYRm": {
+          "type": "ingredient",
+          "settings": {
+            "ingredient_name": "Rice",
+            "ingredient_measurement": "200",
+            "ingredient_measurement_scale": "GM",
+            "ingredient_product": "basmati-rice-200gm"
+          }
+        },
+        "ingredient_QTGXTW": {
+          "type": "ingredient",
+          "settings": {
+            "ingredient_name": "Rice",
+            "ingredient_measurement": "200",
+            "ingredient_measurement_scale": "GM",
+            "ingredient_product": "basmati-rice-200gm"
+          }
+        },
+        "ingredient_RCUrat": {
+          "type": "ingredient",
+          "settings": {
+            "ingredient_name": "Rice",
+            "ingredient_measurement": "200",
+            "ingredient_measurement_scale": "GM",
+            "ingredient_product": "basmati-rice-200gm"
+          }
+        },
+        "ingredient_M9pWxq": {
+          "type": "ingredient",
+          "settings": {
+            "ingredient_name": "Rice",
+            "ingredient_measurement": "200",
+            "ingredient_measurement_scale": "GM",
             "ingredient_product": "basmati-rice-200gm"
           }
         }
       },
       "block_order": [
-        "ingredient_WWxaBh"
+        "ingredient_WWxaBh",
+        "ingredient_hAaYRm",
+        "ingredient_QTGXTW",
+        "ingredient_RCUrat",
+        "ingredient_M9pWxq"
       ],
       "settings": {
         "recipe_title": "Mushroom Biryani",
