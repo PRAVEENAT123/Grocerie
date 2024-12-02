@@ -32,9 +32,9 @@
             "id": "ingredient_name",
             "label": "Ingredient Name"
           }, {
-            "type": "text",
+            "type": "number",
             "id": "ingredient_measurement",
-            "label": "Measurement (200g)"
+            "label": "Measurement"
           }, {
             "type": "select",
             "id": "ingredient_measurement_scale",
@@ -137,9 +137,9 @@
                     id="variant{{ forloop.index }}"
                     onchange="updateMeasurementForVariant({{ forloop.index }})">
                     {% for variant in block.settings.ingredient_product.variants %}
-                      <option value="{{ variant.id }}" data-available="{{ variant.available }}">
-                        {{ variant.title }} - {{ variant.price | money }}
-                      </option>
+                        <option value="{{ variant.id }}" data-available="{{ variant.available }}">
+                          {{ variant.title }} - {{ variant.price | money }}
+                        </option>
                     {% endfor %}
                   </select>
                 </div>
