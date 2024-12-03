@@ -34,7 +34,8 @@
           }, {
             "type": "number",
             "id": "ingredient_measurement",
-            "label": "Measurement"
+            "label": "Measurement",
+            "default": 100
           }, {
             "type": "select",
             "id": "ingredient_measurement_scale",
@@ -67,91 +68,178 @@
     ]
   }
 {% endschema %}
-<div class="recipe-section flex flex-wrap md:flex-nowrap">
-  <!-- Left Column: Recipe Details -->
-  <div class="w-full md:w-1/2 p-4 border-r">
-    <h1 class="text-xl font-bold mb-4">{{ section.settings.recipe_title }}</h1>
-    <!-- Recipe Image -->
-    {% if section.settings.recipe_image %}
-      <img
-        src="{{ section.settings.ingredient_product.featured_image | image_url: 'small' }}"
-        alt="{{ section.settings.ingredient_name }}"
-        class="w-16 h-16 object-cover ml-4"
-        width="64"
-        height="64">
-    {% endif %}
 
-    <!-- Number of People -->
-    <div class="recipe-people mb-4 flex items-center space-x-4">
-      <div>
-        <strong>How Many Serves:</strong>
-        <input
-          type="number"
-          id="recipe_people"
-          value="{{ section.settings.recipe_people }}"
-          class="border p-2 rounded w-16">
-      </div>
-      <button class="bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-500" onclick="updateIngredients()">
-        Calculate
-      </button>
-    </div>
-    <!-- Recipe Instructions -->
-    <div class="recipe-instructions mb-4">
-      <h3 class="text-lg font-semibold">Instructions:</h3>
-      <p>{{ section.settings.recipe_instructions }}</p>
-    </div>
-  </div>
+<div class="border-b border-slate-200">
+  {% for section in content_for_index %}
+    {% assign section_index = forloop.index %}
+  {% endfor %}
+  <button onclick="toggleAccordion({{section_index}})" class="w-full flex justify-between items-center py-5 text-slate-800">
+    <span>{{ section.settings.recipe_title }}</span>
+    <span id="icon-1" class="text-slate-800 transition-transform duration-300">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="w-4 h-4">
+        <path
+          fill-rule="evenodd"
+          d="M12 15.292l-5.146-5.146a1 1 0 0 1 1.414-1.414l4.292 4.292 4.292-4.292a1 1 0 0 1 1.414 1.414L12 15.292z"
+          clip-rule="evenodd" />
+      </svg>
+    </span>
+  </button>
+  <div id="content-1" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+    <div class="pb-5 text-sm text-slate-500">
+      <div class="recipe-section flex flex-wrap md:flex-nowrap">
+        <!-- Left Column: Recipe Details -->
+        <div class="w-full md:w-1/2 p-4 border-r">
+          <h1 class="text-xl font-bold mb-4">{{ section.settings.recipe_title }}</h1>
+          <!-- Recipe Image -->
+          {% if section.settings.recipe_image %}
+            <img
+              src="{{ section.settings.ingredient_product.featured_image | image_url: 'small' }}"
+              alt="{{ section.settings.ingredient_name }}"
+              class="w-16 h-16 object-cover ml-4"
+              width="64"
+              height="64">
+          {% endif %}
 
-  <!-- Right Column: Ingredients, Scale, and Product Details -->
-  <div class="w-full md:w-1/2 p-4" style="max-height: 500px; overflow-y: auto;">
-    <h3 class="text-lg font-semibold mb-4">Ingredients and Products:</h3>
-    <ul id="ingredientsList">
-      {% for block in section.blocks %}
-        {% if block.type == 'ingredient' %}
-          <li class="mb-6 border-b pb-4">
-            <div class="flex items-center justify-between">
-              <!-- Ingredient Name and Measurement -->
-              <div>
-                <span class="font-medium">{{ block.settings.ingredient_name }}:</span>
-                <span id="ingredient{{ forloop.index }}_measurement" data-original="{{ block.settings.ingredient_measurement | remove: 'g' }}">
-                  {{ block.settings.ingredient_measurement }}
-                </span>
-                <span id="ingredient{{ forloop.index }}_scale">
-                  {{ block.settings.ingredient_measurement_scale }}
-                </span>
-              </div>
-              <!-- Product Information -->
-              {% if block.settings.ingredient_product %}
-                <div class="product-info">
-                  <a href="/products/{{ block.settings.ingredient_product.handle }}" class="text-blue-500">View Product</a>
-                  {% if block.settings.ingredient_product.featured_image %}
-                    <img
-                      src="{{ block.settings.ingredient_product.featured_image | img_url: 'small' }}"
-                      alt="{{ block.settings.ingredient_name }}"
-                      class="w-16 h-16 object-cover ml-4"
-                      width="64"
-                      height="64">
-                  {% endif %}
-                  <select
-                    class="border p-2 rounded"
-                    id="variant{{ forloop.index }}"
-                    onchange="updateMeasurementForVariant({{ forloop.index }})">
-                    {% for variant in block.settings.ingredient_product.variants %}
-                        <option value="{{ variant.id }}" data-available="{{ variant.available }}">
-                          {{ variant.title }} - {{ variant.price | money }}
-                        </option>
-                    {% endfor %}
-                  </select>
-                </div>
-              {% endif %}
+          <!-- Number of People -->
+          <div class="recipe-people mb-4 flex items-center space-x-4">
+            <div>
+              <strong>How Many Serves:</strong>
+              <input
+                type="number"
+                id="recipe_people"
+                value="{{ section.settings.recipe_people }}"
+                class="border p-2 rounded w-16">
             </div>
-          </li>
-        {% endif %}
-      {% endfor %}
-    </ul>
+            <button class="bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-500" onclick="updateIngredients()">
+              Calculate
+            </button>
+          </div>
+          <!-- Recipe Instructions -->
+          <div class="recipe-instructions mb-4">
+            <h3 class="text-lg font-semibold">Instructions:</h3>
+            <p>{{ section.settings.recipe_instructions }}</p>
+          </div>
+        </div>
+
+        <!-- Right Column: Ingredients, Scale, and Product Details -->
+        <div class="w-full md:w-1/2 p-4" style="max-height: 500px; overflow-y: auto;">
+          <h3 class="text-lg font-semibold mb-4">Ingredients and Products:</h3>
+          <ul id="ingredientsList">
+            {% for block in section.blocks %}
+              {% if block.type == 'ingredient' %}
+                <li class="mb-6 border-b pb-4">
+                  <div class="flex items-center justify-between">
+                    <!-- Ingredient Name and Measurement -->
+                    <div>
+                      <span class="font-medium">{{ block.settings.ingredient_name }}:</span>
+                      <span id="ingredient{{ forloop.index }}_measurement" data-original="{{ block.settings.ingredient_measurement | remove: 'g' }}">
+                        {{ block.settings.ingredient_measurement }}
+                      </span>
+                      <span id="ingredient{{ forloop.index }}_scale">
+                        {{ block.settings.ingredient_measurement_scale }}
+                      </span>
+                    </div>
+
+                    <!-- Product Information -->
+                    {% if block.settings.ingredient_product %}
+                      <div class="product-info">
+                        {% comment %} <a href="/products/{{ block.settings.ingredient_product.handle }}" class="text-blue-500">View Product</a> {% endcomment %}
+                        {% if block.settings.ingredient_product.featured_image %}
+                          <img
+                            src="{{ block.settings.ingredient_product.featured_image | img_url: 'small' }}"
+                            alt="{{ block.settings.ingredient_name }}"
+                            class="w-16 h-16 object-cover ml-4"
+                            width="64"
+                            height="64">
+                        {% endif %}
+                        <select
+                          class="border p-2 rounded"
+                          id="variant{{ forloop.index }}"
+                          type="hidden"
+                          onchange="updateMeasurementForVariant({{ forloop.index }})">
+                          {% assign variant_displayed = false %}
+                          {% assign no_matching_variant = true %}
+                          {% assign max_variant = null %}
+                          {% assign max_weight = 0 %}
+                          {% assign ingredient_measurement_value = block.settings.ingredient_measurement | remove: 'g' | times: 1 %}
+
+                            {% for variant in block.settings.ingredient_product.variants %}
+                            <!-- Force numeric conversion of variant weight -->
+                            {% assign variant_weight = variant.weight | times: 1 %}
+
+                            <!-- Check if the variant weight is greater than or equal to the ingredient measurement -->
+                            {% if variant_weight >= ingredient_measurement_value and variant_displayed == false %}
+                              <option value="{{ variant.id }}" data-available="{{ variant.available }}">
+                                {{ variant.title }} - {{ variant.price | money }}
+                              </option>
+                              {% assign variant_displayed = true %}
+                              {% assign no_matching_variant = false %}
+                            {% elsif variant_weight > max_weight %}
+                              <!-- Find the variant with the highest weight -->
+                              {% assign max_variant = variant %}
+                              {% assign max_weight = variant_weight %}
+                            {% endif %}
+                          {% endfor %}
+
+                          <!-- If no variant meets the condition, display the max variant -->
+                          {% if no_matching_variant and max_variant != null %}
+                            {% assign required_quantity = ingredient_measurement_value | divided_by: max_variant.weight %}
+                            {% assign rounded_quantity = required_quantity | round %}
+                            <option value="{{ max_variant.id }}" data-available="{{ max_variant.available }}">
+                              {{ max_variant.title }} - {{ max_variant.price | money }} ({{ rounded_quantity }} units)
+                            </option>
+                          {% endif %}
+                        </select>
+                        <!-- Cart Button to Add Product to Cart -->
+                        <button class="bg-blue-500 text-white p-2 rounded mt-2" onclick="addToCart(variant{{ forloop.index }}, {{ rounded_quantity }})">
+                          Add to Cart
+                        </button>
+                      </div>
+                    {% endif %}
+                  </div>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
+<script>
+   function toggleAccordion(index) {
+    const content = document.getElementById(`content-${index}`);
+    const icon = document.getElementById(`icon-${index}`);
+   
+    // SVG for Down Arrow
+    const downArrowSVG = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+        <path fill-rule="evenodd" d="M12 15.292l-5.146-5.146a1 1 0 0 1 1.414-1.414l4.292 4.292 4.292-4.292a1 1 0 0 1 1.414 1.414L12 15.292z" clip-rule="evenodd" />
+      </svg>
+    `;
+   
+    // SVG for Up Arrow
+    const upArrowSVG = `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+        <path fill-rule="evenodd" d="M12 8.707l5.146 5.146a1 1 0 0 1-1.414 1.414L12 10.707l-4.292 4.292a1 1 0 0 1-1.414-1.414L12 8.707z" clip-rule="evenodd" />
+      </svg>
+    `;
+   
+    // Toggle the content's max-height for smooth opening and closing
+    if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+      content.style.maxHeight = '0';
+      icon.innerHTML = downArrowSVG; // Set Down Arrow
+    } else {
+      content.style.maxHeight = content.scrollHeight + 'px';
+      icon.innerHTML = upArrowSVG; // Set Up Arrow
+    }
+  }
+</script>
 <script>
     function updateIngredients() {
         // Get the number of people from the input
@@ -198,9 +286,39 @@
             }
         });
     }
+   function addToCart(variantId, quantity) {
+  
+                       console.log('Adding to cart:', variantId.value, 'Quantity:', quantity);
+  
+                    let formData = {
+                   'items': [{
+                         'id': variantId.value,
+                         'quantity': quantity
+                          }]
+                  };
+  
+                    fetch(window.Shopify.routes.root + 'cart/add.js', {
+                    method: 'POST',
+                    headers: {
+                   'Content-Type': 'application/json'
+                     },
+                      body: JSON.stringify(formData)
+                            })
+                     .then(response => {
+                    
+                     return response.json();
+                    })
+                    .then(
+                      alert("cart added !")
+                    )
+                     .catch((error) => {
+                   console.error('Error:', error);
+                    });
+                         };
+  
+    // Close Modal
 </script>
 <style>
-  /* Tailwind CSS styling, customize as needed */
   .recipe-section {
     padding: 2rem;
   }
