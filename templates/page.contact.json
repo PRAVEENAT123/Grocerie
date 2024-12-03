@@ -70,9 +70,32 @@
         "recipe_people": "1",
         "recipe_instructions": "Heat ghee or oil in a pan.\nAdd whole spices (bay leaf, cinnamon, cloves, cardamom, star anise, cumin seeds) and sauté until aromatic.\nAdd sliced onions and green chilies; fry until golden brown.\nAdd ginger-garlic paste; sauté until the raw smell disappears.\nAdd chopped tomatoes; cook until soft and mushy.\nStir in turmeric powder, red chili powder, and biryani masala; mix well.\nAdd yogurt and stir until the masala becomes creamy.\nAdd sliced mushrooms; cook for 5-7 minutes until soft.\nMix in chopped mint and coriander leaves.\nIn a pot, layer half the cooked rice.\nSpread the mushroom masala over the rice.\nAdd the remaining rice on top and garnish with mint and coriander leaves.\nCover with a tight lid or foil and cook on low heat for 15-20 minutes (Dum).\nGently mix before serving hot."
       }
+    },
+    "templete_recipe_T8GDyx": {
+      "type": "templete-recipe",
+      "blocks": {
+        "ingredient_jyfLkr": {
+          "type": "ingredient",
+          "settings": {
+            "ingredient_name": "Test Ingredient",
+            "ingredient_measurement": 100,
+            "ingredient_measurement_scale": "GM",
+            "ingredient_product": "basmati-rice-200gm"
+          }
+        }
+      },
+      "block_order": [
+        "ingredient_jyfLkr"
+      ],
+      "settings": {
+        "recipe_title": "Second Recipe",
+        "recipe_people": "1",
+        "recipe_instructions": ""
+      }
     }
   },
   "order": [
-    "templete-recipe"
+    "templete-recipe",
+    "templete_recipe_T8GDyx"
   ]
 }
