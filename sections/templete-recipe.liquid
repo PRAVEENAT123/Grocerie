@@ -69,13 +69,10 @@
   }
 {% endschema %}
 
-<div class="border-b border-slate-200">
-  {% for section in content_for_index %}
-    {% assign section_index = forloop.index %}
-  {% endfor %}
-  <button onclick="toggleAccordion({{section_index}})" class="w-full flex justify-between items-center py-5 text-slate-800">
+<div class="border-b border-slate-200" id="section-{{ section.id }}">
+  <button onclick="toggleAccordion('{{ section.id }}')" class="w-full flex justify-between items-center py-5 text-slate-800">
     <span>{{ section.settings.recipe_title }}</span>
-    <span id="icon-1" class="text-slate-800 transition-transform duration-300">
+    <span id="icon-{{ section.id }}" class="text-slate-800 transition-transform duration-300">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -88,7 +85,7 @@
       </svg>
     </span>
   </button>
-  <div id="content-1" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+  <div id="content-{{ section.id }}" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
     <div class="pb-5 text-sm text-slate-500">
       <div class="recipe-section flex flex-wrap md:flex-nowrap">
         <!-- Left Column: Recipe Details -->
@@ -110,15 +107,14 @@
               <strong>How Many Serves:</strong>
               <input
                 type="number"
-                id="recipe_people"
+                id="recipe-people-{{ section.id }}"
                 value="{{ section.settings.recipe_people }}"
                 class="border p-2 rounded w-16">
             </div>
-            <button class="bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-500" onclick="updateIngredients()">
+            <button class="bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-500" onclick="updateIngredients('{{section.id}}')">
               Calculate
             </button>
           </div>
-          <!-- Recipe Instructions -->
           <div class="recipe-instructions mb-4">
             <h3 class="text-lg font-semibold">Instructions:</h3>
             <p>{{ section.settings.recipe_instructions }}</p>
@@ -128,7 +124,7 @@
         <!-- Right Column: Ingredients, Scale, and Product Details -->
         <div class="w-full md:w-1/2 p-4" style="max-height: 500px; overflow-y: auto;">
           <h3 class="text-lg font-semibold mb-4">Ingredients and Products:</h3>
-          <ul id="ingredientsList">
+          <ul id="ingredientsList-{{ section.id }}">
             {% for block in section.blocks %}
               {% if block.type == 'ingredient' %}
                 <li class="mb-6 border-b pb-4">
@@ -148,17 +144,15 @@
                     {% if block.settings.ingredient_product %}
                       <div class="product-info">
                         {% comment %} <a href="/products/{{ block.settings.ingredient_product.handle }}" class="text-blue-500">View Product</a> {% endcomment %}
-                        {% if block.settings.ingredient_product.featured_image %}
-                          <img
-                            src="{{ block.settings.ingredient_product.featured_image | img_url: 'small' }}"
-                            alt="{{ block.settings.ingredient_name }}"
-                            class="w-16 h-16 object-cover ml-4"
-                            width="64"
-                            height="64">
-                        {% endif %}
+                        {% comment %} {% if block.settings.ingredient_product.featured_image %}                                                                                                                                                                                                                src="{{ block.settings.ingredient_product.featured_image | img_url: 'small' }}"
+                                                                                                                                                                                                                                                                                              alt="{{ block.settings.ingredient_name }}"
+                                                                                                                                                                                                                                                                                              class="w-16 h-16 object-cover ml-4"
+                                                                                                                                                                                                                                                                                              width="64"
+                                                                                                                                                                                                                                                                                              height="64">
+                                                                                                                                                                                                                                                                      {% endif %} {% endcomment %}
                         <select
-                          class="border p-2 rounded"
-                          id="variant{{ forloop.index }}"
+                          class="border p-2 rounded variant{{forloop.index}}"
+                          id="variant{{ block.id }}"
                           type="hidden"
                           onchange="updateMeasurementForVariant({{ forloop.index }})">
                           {% assign variant_displayed = false %}
@@ -195,9 +189,16 @@
                           {% endif %}
                         </select>
                         <!-- Cart Button to Add Product to Cart -->
-                        <button class="bg-blue-500 text-white p-2 rounded mt-2" onclick="addToCart(variant{{ forloop.index }}, {{ rounded_quantity }})">
-                          Add to Cart
-                        </button>
+                        {% if rounded_quantity != null %}
+                          <button class="bg-blue-500 text-white p-2 rounded mt-2" onclick="addToCart(variant{{ block.id}}, {{ rounded_quantity }})">
+                            Add to Cart
+                          </button>
+                          {% assign rounded_quantity = null %}
+                        {% else %}
+                          <button class="bg-blue-500 text-white p-2 rounded mt-2" onclick="addToCart(variant{{ block.id}}, {{ 1 }})">
+                            Add to Cart
+                          </button>
+                        {% endif %}
                       </div>
                     {% endif %}
                   </div>
@@ -211,8 +212,9 @@
   </div>
 </div>
 
+
 <script>
-   function toggleAccordion(index) {
+  function toggleAccordion(index) {
     const content = document.getElementById(`content-${index}`);
     const icon = document.getElementById(`icon-${index}`);
    
@@ -241,9 +243,9 @@
   }
 </script>
 <script>
-    function updateIngredients() {
+    function updateIngredients(section_id) {
         // Get the number of people from the input
-        const numberOfPeopleInput = document.getElementById("recipe_people");
+        const numberOfPeopleInput = document.getElementById(`recipe-people-${section_id}`);
         if (!numberOfPeopleInput) {
             console.error("Input field for 'number of people' is missing");
             return;
@@ -255,7 +257,12 @@
         }
         // Log the number of people
         // Select all list items (li) under the ingredients list
-        const ingredientItems = document.querySelectorAll('#ingredientsList li');
+        const ingredientItems = document.querySelectorAll(`#ingredientsList-${section_id} li`);
+  
+                const select  = document.querySelectorAll(`#ingredientsList-${section_id} select`);
+  
+                alert(select)
+  
         if (!ingredientItems.length) {
             console.error("No ingredients found");
             return;
@@ -285,22 +292,22 @@
                 console.log(`Missing measurement element in ingredient ${index + 1}`);
             }
         });
+        
     }
    function addToCart(variantId, quantity) {
+                console.log('Adding to cart:', variantId.value, 'Quantity:', quantity);
   
-                       console.log('Adding to cart:', variantId.value, 'Quantity:', quantity);
-  
-                    let formData = {
-                   'items': [{
-                         'id': variantId.value,
-                         'quantity': quantity
-                          }]
-                  };
+                let formData = {
+                'items': [{
+                'id': variantId.value,
+                'quantity': quantity
+                }]
+                };
   
                     fetch(window.Shopify.routes.root + 'cart/add.js', {
                     method: 'POST',
                     headers: {
-                   'Content-Type': 'application/json'
+                  'Content-Type': 'application/json'
                      },
                       body: JSON.stringify(formData)
                             })
@@ -308,9 +315,7 @@
                     
                      return response.json();
                     })
-                    .then(
-                      alert("cart added !")
-                    )
+  
                      .catch((error) => {
                    console.error('Error:', error);
                     });
