@@ -145,27 +145,35 @@
                       <div class="product-info">
                         {% comment %} <a href="/products/{{ block.settings.ingredient_product.handle }}" class="text-blue-500">View Product</a> {% endcomment %}
                         {% comment %} {% if block.settings.ingredient_product.featured_image %}                                                                                                                                                                                                                src="{{ block.settings.ingredient_product.featured_image | img_url: 'small' }}"
-                                                                                                                                                                                                                                                                                              alt="{{ block.settings.ingredient_name }}"
-                                                                                                                                                                                                                                                                                              class="w-16 h-16 object-cover ml-4"
-                                                                                                                                                                                                                                                                                              width="64"
-                                                                                                                                                                                                                                                                                              height="64">
-                                                                                                                                                                                                                                                                      {% endif %} {% endcomment %}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          alt="{{ block.settings.ingredient_name }}"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          class="w-16 h-16 object-cover ml-4"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          width="64"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          height="64">
+                                                                                                                                                                                                                                                                                                                                                                                                                      {% endif %} {% endcomment %}
                         <select
-                          class="border p-2 rounded variant{{forloop.index}}"
+                          class="border p-2 rounded variant{{ forloop.index }}"
                           id="variant{{ block.id }}"
-                          type="hidden"
+                          data-variants='[
+    {% for variant in block.settings.ingredient_product.variants %}
+      { 
+        "id": "{{ variant.id }}", 
+        "weight": {{ variant.weight | times: 1 }},
+        "price": "{{ variant.price | money }}", 
+        "title": "{{ variant.title }}", 
+        "available": {{ variant.available | json }}
+      }{% if forloop.last == false %},{% endif %}
+    {% endfor %}
+  ]'
                           onchange="updateMeasurementForVariant({{ forloop.index }})">
+                          <!-- Options will be dynamically updated -->
                           {% assign variant_displayed = false %}
                           {% assign no_matching_variant = true %}
                           {% assign max_variant = null %}
                           {% assign max_weight = 0 %}
                           {% assign ingredient_measurement_value = block.settings.ingredient_measurement | remove: 'g' | times: 1 %}
 
-                            {% for variant in block.settings.ingredient_product.variants %}
-                            <!-- Force numeric conversion of variant weight -->
+                          {% for variant in block.settings.ingredient_product.variants %}
                             {% assign variant_weight = variant.weight | times: 1 %}
-
-                            <!-- Check if the variant weight is greater than or equal to the ingredient measurement -->
                             {% if variant_weight >= ingredient_measurement_value and variant_displayed == false %}
                               <option value="{{ variant.id }}" data-available="{{ variant.available }}">
                                 {{ variant.title }} - {{ variant.price | money }}
@@ -173,13 +181,11 @@
                               {% assign variant_displayed = true %}
                               {% assign no_matching_variant = false %}
                             {% elsif variant_weight > max_weight %}
-                              <!-- Find the variant with the highest weight -->
                               {% assign max_variant = variant %}
                               {% assign max_weight = variant_weight %}
                             {% endif %}
                           {% endfor %}
 
-                          <!-- If no variant meets the condition, display the max variant -->
                           {% if no_matching_variant and max_variant != null %}
                             {% assign required_quantity = ingredient_measurement_value | divided_by: max_variant.weight %}
                             {% assign rounded_quantity = required_quantity | round %}
@@ -188,17 +194,10 @@
                             </option>
                           {% endif %}
                         </select>
-                        <!-- Cart Button to Add Product to Cart -->
-                        {% if rounded_quantity != null %}
-                          <button class="bg-blue-500 text-white p-2 rounded mt-2" onclick="addToCart(variant{{ block.id}}, {{ rounded_quantity }})">
-                            Add to Cart
-                          </button>
-                          {% assign rounded_quantity = null %}
-                        {% else %}
-                          <button class="bg-blue-500 text-white p-2 rounded mt-2" onclick="addToCart(variant{{ block.id}}, {{ 1 }})">
-                            Add to Cart
-                          </button>
-                        {% endif %}
+                        <!-- Add to Cart Button -->
+                        <button class="bg-blue-500 text-white p-2 rounded mt-2" onclick="addToCart('variant{{ block.id }}', {{ rounded_quantity | default: 1 }})">
+                          Add to Cart
+                        </button>
                       </div>
                     {% endif %}
                   </div>
@@ -243,63 +242,96 @@
   }
 </script>
 <script>
-    function updateIngredients(section_id) {
-        // Get the number of people from the input
-        const numberOfPeopleInput = document.getElementById(`recipe-people-${section_id}`);
-        if (!numberOfPeopleInput) {
-            console.error("Input field for 'number of people' is missing");
-            return;
-        }
-        const numberOfPeople = parseInt(numberOfPeopleInput.value);
-        if (isNaN(numberOfPeople) || numberOfPeople <= 0) {
-            alert("Please enter a valid number of people.");
-            return;
-        }
-        // Log the number of people
-        // Select all list items (li) under the ingredients list
-        const ingredientItems = document.querySelectorAll(`#ingredientsList-${section_id} li`);
-  
-                const select  = document.querySelectorAll(`#ingredientsList-${section_id} select`);
-  
-                alert(select)
-  
-        if (!ingredientItems.length) {
-            console.error("No ingredients found");
-            return;
-        }
-        // Loop through each ingredient to update measurements
-        ingredientItems.forEach((ingredientItem, index) => {
-            // Find the measurement element for each ingredient
-            const measurementElement = ingredientItem.querySelector(`#ingredient${index + 1}_measurement`);
-            const scaleElement = ingredientItem.querySelector(`#ingredient${index + 1}_scale`);
-            if (measurementElement && measurementElement.dataset.original) {
-                const originalMeasurement = parseFloat(measurementElement.dataset.original);
-                if (!isNaN(originalMeasurement)) {
-                    // Calculate the new measurement based on number of servings
-                    const newMeasurement = originalMeasurement * numberOfPeople;
-                    // Update the measurement display
-                    measurementElement.textContent = newMeasurement;
-                    // Log the updated measurement and scale
-                    // if (scaleElement) {
-                    //     console.log(`Ingredient ${index + 1}: ${measurementElement.textContent} ${scaleElement.textContent}`);
-                    // } else {
-                    //     console.warn(`Scale element is missing for ingredient ${index + 1}`);
-                    // }
-                } else {
-                    console.error(`Invalid or missing original measurement on ingredient ${index + 1}`);
-                }
-            } else {
-                console.log(`Missing measurement element in ingredient ${index + 1}`);
-            }
-        });
-        
+   function updateIngredients(section_id) {
+    const numberOfPeopleInput = document.getElementById(`recipe-people-${section_id}`);
+    if (!numberOfPeopleInput) {
+        console.error("Input field for 'number of people' is missing");
+        return;
     }
-   function addToCart(variantId, quantity) {
-                console.log('Adding to cart:', variantId.value, 'Quantity:', quantity);
+    const numberOfPeople = parseInt(numberOfPeopleInput.value);
+    if (isNaN(numberOfPeople) || numberOfPeople <= 0) {
+        alert("Please enter a valid number of people.");
+        return;
+    }
   
+    const ingredientItems = document.querySelectorAll(`#ingredientsList-${section_id} li`);
+    if (!ingredientItems.length) {
+        console.error("No ingredients found");
+        return;
+    }
+  
+    ingredientItems.forEach((ingredientItem, index) => {
+        const measurementElement = ingredientItem.querySelector(`#ingredient${index + 1}_measurement`);
+        if (measurementElement && measurementElement.dataset.original) {
+            const originalMeasurement = parseFloat(measurementElement.dataset.original);
+            if (!isNaN(originalMeasurement)) {
+                const newMeasurement = originalMeasurement * numberOfPeople;
+                measurementElement.textContent = newMeasurement;
+            }
+        }
+  
+        // Get the select element by class
+        const selectElements = ingredientItem.getElementsByClassName(`variant${index + 1}`);
+        if (selectElements.length > 0) {
+            const selectElement = selectElements[0]; // Access the first element
+            const variants = JSON.parse(selectElement.dataset.variants);
+            const ingredientMeasurement = parseFloat(measurementElement.textContent);
+  
+            selectElement.innerHTML = ""; // Clear old options
+  
+            let maxVariant = null;
+            let maxWeight = 0;
+            let variantDisplayed = false;
+  
+            variants.forEach(variant => {
+                const variantWeight = parseFloat(variant.weight);
+                if (variantWeight >= ingredientMeasurement && !variantDisplayed) {
+                    const option = document.createElement("option");
+                    option.value = variant.id;
+                    option.textContent = `${variant.title} - ${variant.price} (1 unit)`;
+                    selectElement.appendChild(option);
+                    variantDisplayed = true;
+                } else if (variantWeight > maxWeight) {
+                    maxVariant = variant;
+                    maxWeight = variantWeight;
+                }
+            });
+  
+            if (!variantDisplayed && maxVariant) {
+                const requiredQuantity = Math.ceil(ingredientMeasurement / maxWeight);
+                const option = document.createElement("option");
+                option.value = maxVariant.id;
+                option.textContent = `${maxVariant.title} - ${maxVariant.price} (${requiredQuantity} units)`;
+                selectElement.appendChild(option);
+            }
+        } else {
+            console.warn(`Select element for ingredient ${index + 1} not found.`);
+        }
+    });
+  }
+  
+  function addToCart(selectId, quantity) {
+    const selectElement = document.getElementById(selectId);
+    if (!selectElement) {
+        console.error(`Select element with ID '${selectId}' not found`);
+        return;
+    }
+    const selectedVariantId = selectElement.value;
+    if (!selectedVariantId) {
+        alert("Please select a variant.");
+        return;
+    }
+  
+    // Mockup: Add to Cart Logic
+    console.log(`Adding Variant ID: ${selectedVariantId} with Quantity: ${quantity}`);
+  }
+  
+   function addToCart(variantId, quantity) {
+                const selectElement = document.getElementById(variantId);
+  alert(selectElement.value)
                 let formData = {
                 'items': [{
-                'id': variantId.value,
+                'id': selectElement.value,
                 'quantity': quantity
                 }]
                 };
