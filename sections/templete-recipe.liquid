@@ -145,11 +145,11 @@
                       <div class="product-info">
                         {% comment %} <a href="/products/{{ block.settings.ingredient_product.handle }}" class="text-blue-500">View Product</a> {% endcomment %}
                         {% comment %} {% if block.settings.ingredient_product.featured_image %}                                                                                                                                                                                                                src="{{ block.settings.ingredient_product.featured_image | img_url: 'small' }}"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          alt="{{ block.settings.ingredient_name }}"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          class="w-16 h-16 object-cover ml-4"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          width="64"
-                                                                                                                                                                                                                                                                                                                                                                                                                                                          height="64">
-                                                                                                                                                                                                                                                                                                                                                                                                                      {% endif %} {% endcomment %}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            alt="{{ block.settings.ingredient_name }}"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            class="w-16 h-16 object-cover ml-4"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            width="64"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            height="64">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {% endif %} {% endcomment %}
                         <select
                           class="border p-2 rounded variant{{ forloop.index }}"
                           id="variant{{ block.id }}"
@@ -193,9 +193,11 @@
                               {{ max_variant.title }} - {{ max_variant.price | money }} ({{ rounded_quantity }} units)
                             </option>
                           {% endif %}
+
                         </select>
+
                         <!-- Add to Cart Button -->
-                        <button class="bg-blue-500 text-white p-2 rounded mt-2" onclick="addToCart('variant{{ block.id }}', {{ rounded_quantity | default: 1 }})">
+                        <button class="bg-blue-500 text-white p-2 rounded mt-2 add-to-cart-button" onclick="addToCart('variant{{ block.id }}', {{ rounded_quantity | default: 1 }})">
                           Add to Cart
                         </button>
                       </div>
@@ -304,34 +306,41 @@
                 option.textContent = `${maxVariant.title} - ${maxVariant.price} (${requiredQuantity} units)`;
                 selectElement.appendChild(option);
             }
+             // Set the cart button parameters dynamically
+            const selectedVariantId = selectElement.value;
+            const unit = Math.ceil(ingredientMeasurement / maxWeight);
+        
+  
+          const oldAddToCartButton = ingredientItem.querySelector(".add-to-cart-button");
+  if (oldAddToCartButton) {
+    oldAddToCartButton.remove();
+  }
+  
+  // Create the new Add to Cart button
+  const newAddToCartButton = document.createElement("button");
+  newAddToCartButton.className = "bg-blue-500 text-white p-2 rounded mt-2 add-to-cart-button";
+  newAddToCartButton.textContent = "Add to Cart";
+  newAddToCartButton.setAttribute("onclick", `addToCart('${selectedVariantId}', ${unit})`);
+  
+  // Append the new button after the select element
+  ingredientItem.appendChild(newAddToCartButton);
+  alert('working fine ')
+            
         } else {
             console.warn(`Select element for ingredient ${index + 1} not found.`);
         }
     });
   }
   
-  function addToCart(selectId, quantity) {
-    const selectElement = document.getElementById(selectId);
-    if (!selectElement) {
-        console.error(`Select element with ID '${selectId}' not found`);
-        return;
-    }
-    const selectedVariantId = selectElement.value;
-    if (!selectedVariantId) {
-        alert("Please select a variant.");
-        return;
-    }
   
-    // Mockup: Add to Cart Logic
-    console.log(`Adding Variant ID: ${selectedVariantId} with Quantity: ${quantity}`);
-  }
   
    function addToCart(variantId, quantity) {
-                const selectElement = document.getElementById(variantId);
-  alert(selectElement.value)
+  //               const selectElement = document.getElementById(variantId);
+  // alert(selectElement.value)
+  alert(variantId)
                 let formData = {
                 'items': [{
-                'id': selectElement.value,
+                'id': variantId,
                 'quantity': quantity
                 }]
                 };
