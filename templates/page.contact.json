@@ -51,10 +51,10 @@
         "ingredient_M9pWxq": {
           "type": "ingredient",
           "settings": {
-            "ingredient_name": "Rice",
+            "ingredient_name": "oil",
             "ingredient_measurement": 100,
-            "ingredient_measurement_scale": "GM",
-            "ingredient_product": "basmati-rice-200gm"
+            "ingredient_measurement_scale": "ML",
+            "ingredient_product": "sun-flower-oil"
           }
         }
       },
