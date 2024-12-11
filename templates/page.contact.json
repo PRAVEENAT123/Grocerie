@@ -70,7 +70,7 @@
           "settings": {
             "ingredient_name": "Rice",
             "ingredient_measurement": 200,
-            "ingredient_measurement_scale": "GM",
+            "ingredient_measurement_scale": "Tsp",
             "ingredient_product": "basmati-rice-200gm"
           }
         },
