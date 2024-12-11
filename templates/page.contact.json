@@ -38,12 +38,22 @@
             "ingredient_measurement_scale": "Tsp",
             "ingredient_product": "chilli-powder"
           }
+        },
+        "ingredient_NRQT38": {
+          "type": "ingredient",
+          "settings": {
+            "ingredient_name": "Turmeric Powder",
+            "ingredient_measurement": 1,
+            "ingredient_measurement_scale": "Tsp",
+            "ingredient_product": "chilli-powder"
+          }
         }
       },
       "block_order": [
         "ingredient_naydMj",
         "ingredient_WWxaBh",
-        "ingredient_pC7XrV"
+        "ingredient_pC7XrV",
+        "ingredient_NRQT38"
       ],
       "settings": {
         "recipe_title": "Mushroom Biryani",
