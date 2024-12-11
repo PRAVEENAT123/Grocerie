@@ -34,8 +34,8 @@
           "type": "ingredient",
           "settings": {
             "ingredient_name": "Chlli Powder",
-            "ingredient_measurement": 1,
-            "ingredient_measurement_scale": "Tsp",
+            "ingredient_measurement": 10,
+            "ingredient_measurement_scale": "GM",
             "ingredient_product": "chilli-powder"
           }
         },
@@ -43,9 +43,18 @@
           "type": "ingredient",
           "settings": {
             "ingredient_name": "Turmeric Powder",
-            "ingredient_measurement": 1,
-            "ingredient_measurement_scale": "Tsp",
-            "ingredient_product": "chilli-powder"
+            "ingredient_measurement": 10,
+            "ingredient_measurement_scale": "GM",
+            "ingredient_product": "chilli-powder-copy"
+          }
+        },
+        "ingredient_jpYHG3": {
+          "type": "ingredient",
+          "settings": {
+            "ingredient_name": "Onion",
+            "ingredient_measurement": 50,
+            "ingredient_measurement_scale": "GM",
+            "ingredient_product": "onion"
           }
         }
       },
@@ -53,7 +62,8 @@
         "ingredient_naydMj",
         "ingredient_WWxaBh",
         "ingredient_pC7XrV",
-        "ingredient_NRQT38"
+        "ingredient_NRQT38",
+        "ingredient_jpYHG3"
       ],
       "settings": {
         "recipe_title": "Mushroom Biryani",
