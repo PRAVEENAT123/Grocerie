@@ -51,10 +51,10 @@
         "ingredient_jpYHG3": {
           "type": "ingredient",
           "settings": {
-            "ingredient_name": "",
-            "ingredient_measurement": 100,
-            "ingredient_measurement_scale": "GM",
-            "ingredient_product": ""
+            "ingredient_name": "Onion",
+            "ingredient_measurement": 1,
+            "ingredient_measurement_scale": "Cup",
+            "ingredient_product": "onion"
           }
         }
       },
