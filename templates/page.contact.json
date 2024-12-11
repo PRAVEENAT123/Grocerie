@@ -47,23 +47,13 @@
             "ingredient_measurement_scale": "GM",
             "ingredient_product": "basmati-rice-200gm"
           }
-        },
-        "ingredient_M9pWxq": {
-          "type": "ingredient",
-          "settings": {
-            "ingredient_name": "oil",
-            "ingredient_measurement": 100,
-            "ingredient_measurement_scale": "ML",
-            "ingredient_product": "sun-flower-oil"
-          }
         }
       },
       "block_order": [
         "ingredient_WWxaBh",
         "ingredient_hAaYRm",
         "ingredient_QTGXTW",
-        "ingredient_RCUrat",
-        "ingredient_M9pWxq"
+        "ingredient_RCUrat"
       ],
       "settings": {
         "recipe_title": "Mushroom Biryani",
