@@ -52,8 +52,8 @@
           "type": "ingredient",
           "settings": {
             "ingredient_name": "Onion",
-            "ingredient_measurement": 1,
-            "ingredient_measurement_scale": "Cup",
+            "ingredient_measurement": 50,
+            "ingredient_measurement_scale": "GM",
             "ingredient_product": "onion"
           }
         }
