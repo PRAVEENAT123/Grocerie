@@ -1,21 +1,21 @@
-<!-- sections/collections-grid.liquid -->
-<div class="collections-grid">
-    <div class="grid">
-        {% for collection in collections %}
-        <div class="collection-item">
-            <a href="{{ collection.url }}">
-                <!-- Display Collection Image -->
-                {% if collection.image %}
-                <img src="{{ collection.image.src | img_url: 'medium' }}" alt="{{ collection.title }}">
-                {% else %}
-                <img src="https://via.placeholder.com/300" alt="{{ collection.title }}">
-                {% endif %}
-                <!-- Display Collection Title -->
-                <h3>{{ collection.title }}</h3>
-            </a>
-            <!-- Optional: Display Collection Description -->
-            <p>{{ collection.description | truncate: 100 }}</p>
-        </div>
-        {% endfor %}
-    </div>
-</div>
+{% comment %} <!-- sections/collections-grid.liquid -->
+  <div class="collections-grid">
+      <div class="grid">
+          {% for collection in collections %}
+          <div class="collection-item">
+              <a href="{{ collection.url }}">
+                  <!-- Display Collection Image -->
+                  {% if collection.image %}
+                  <img src="{{ collection.image.src | img_url: 'medium' }}" alt="{{ collection.title }}">
+                  {% else %}
+                  <img src="https://via.placeholder.com/300" alt="{{ collection.title }}">
+                  {% endif %}
+                  <!-- Display Collection Title -->
+                  <h3>{{ collection.title }}</h3>
+              </a>
+              <!-- Optional: Display Collection Description -->
+              <p>{{ collection.description | truncate: 100 }}</p>
+          </div>
+          {% endfor %}
+      </div>
+</div> {% endcomment %}
