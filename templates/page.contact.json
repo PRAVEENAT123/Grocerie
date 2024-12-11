@@ -29,11 +29,31 @@
             "ingredient_measurement_scale": "GM",
             "ingredient_product": "basmati-rice-200gm"
           }
+        },
+        "ingredient_pC7XrV": {
+          "type": "ingredient",
+          "settings": {
+            "ingredient_name": "Chlli Powder",
+            "ingredient_measurement": 1,
+            "ingredient_measurement_scale": "Tsp",
+            "ingredient_product": "chilli-powder"
+          }
+        },
+        "ingredient_NRQT38": {
+          "type": "ingredient",
+          "settings": {
+            "ingredient_name": "Turmeric Powder",
+            "ingredient_measurement": 1,
+            "ingredient_measurement_scale": "Tsp",
+            "ingredient_product": "chilli-powder"
+          }
         }
       },
       "block_order": [
         "ingredient_naydMj",
-        "ingredient_WWxaBh"
+        "ingredient_WWxaBh",
+        "ingredient_pC7XrV",
+        "ingredient_NRQT38"
       ],
       "settings": {
         "recipe_title": "Mushroom Biryani",
@@ -98,6 +118,7 @@
         "ingredient_FEdE4p",
         "ingredient_KKmMDY"
       ],
+      "disabled": true,
       "settings": {
         "recipe_title": "Testing 1",
         "recipe_people": "1",
@@ -161,6 +182,7 @@
         "ingredient_j9wcGA",
         "ingredient_BQXTCw"
       ],
+      "disabled": true,
       "settings": {
         "recipe_title": "Testing 2",
         "recipe_people": "1",
