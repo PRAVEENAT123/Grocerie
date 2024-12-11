@@ -29,11 +29,21 @@
             "ingredient_measurement_scale": "GM",
             "ingredient_product": "basmati-rice-200gm"
           }
+        },
+        "ingredient_pC7XrV": {
+          "type": "ingredient",
+          "settings": {
+            "ingredient_name": "Chlli Powder",
+            "ingredient_measurement": 1,
+            "ingredient_measurement_scale": "Tsp",
+            "ingredient_product": "chilli-powder"
+          }
         }
       },
       "block_order": [
         "ingredient_naydMj",
-        "ingredient_WWxaBh"
+        "ingredient_WWxaBh",
+        "ingredient_pC7XrV"
       ],
       "settings": {
         "recipe_title": "Mushroom Biryani",
