@@ -17,10 +17,21 @@
     "collection-slider": {
       "type": "collection-slider",
       "settings": {}
+    },
+    "templete_recipe_teraie": {
+      "type": "templete-recipe",
+      "settings": {
+        "recipe_title": "Your Menu",
+        "recipe_image": "shopify://shop_images/retail-shopping-package.jpg",
+        "recipe_people": "1",
+        "recipe_instructions": "",
+        "recipe_pdf": ""
+      }
     }
   },
   "order": [
     "template-home-page",
-    "collection-slider"
+    "collection-slider",
+    "templete_recipe_teraie"
   ]
 }
